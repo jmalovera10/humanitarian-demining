@@ -1,0 +1,22 @@
+%Anchor 1 coordinates 
+anchor1 = [0,0];
+%Anchor 2 coordinates 
+anchor2 = [0,10];
+%Anchor 3 coordinates 
+anchor3 = [10,0];
+%Anchor 4 coordinates 
+anchor4 = [10,10];
+
+%Mobile coordinates
+mobile1 = [5,5];
+
+anchors = [anchor1;anchor2;anchor3;anchor4;mobile1];
+plot(anchors(:,1),anchors(:,2),'*')
+%hold on
+for i = 1:4
+    radius = anchors(i,:)-mobile1;
+end
+
+
+
+
