@@ -1,22 +1,37 @@
 %Anchor 1 coordinates 
-anchor1 = [0,0];
+anchor1 = [-1,-1];
 %Anchor 2 coordinates 
-anchor2 = [0,10];
+anchor2 = [-1,11];
 %Anchor 3 coordinates 
-anchor3 = [10,0];
+anchor3 = [11,-1];
 %Anchor 4 coordinates 
-anchor4 = [10,10];
+anchor4 = [11,11];
 
-%Mobile coordinates
-mobile1 = [5,5];
+%Mobile coordinate
+mobile1 = [1,5];
 
 anchors = [anchor1;anchor2;anchor3;anchor4;mobile1];
+clf('reset')
 plot(anchors(:,1),anchors(:,2),'*')
-%hold on
+xlabel('m')
+ylabel('m')
+xlim([-2 12])
+ylim([-2 12])
+dog = strcat('  Dog:','[',num2str(mobile1(1)),',',num2str(mobile1(2)),']');
+text(mobile1(1),mobile1(2),dog)
+grid on
+hold on
+rssi = [];
+
 for i = 1:4
-    radius = anchors(i,:)-mobile1;
+    radius = norm(anchors(i,:)-mobile1);
+    [xval, yval] = radiation(radius);
+    xval = xval+anchors(i,1);
+    yval = yval+anchors(i,2);
+    plot(xval,yval,'--')
+    txt = strcat('  Anchor',num2str(i),t);
+    text(anchors(i,1),anchors(i,2),txt)
+    rssi(i) = rssi_value(radius);
 end
 
-
-
-
+distances = distance(rssi);
