@@ -1,0 +1,7 @@
+function [ J ] = Jacobian( x, y, anchors)
+%JACOBIAN Summary of this function goes here
+%   Detailed explanation goes here
+dfbx1 = 0.5*((2*x-2*anchors(1,1))/(sqrt((x-anchors(1,1)).^2)))
+
+end
+

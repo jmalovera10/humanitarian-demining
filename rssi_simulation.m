@@ -8,7 +8,7 @@ anchor3 = [12,0];
 anchor4 = [12,12];
 
 %Mobile coordinate
-mobile1 = [7,5];
+mobile1 = [6,6];
 
 anchors = [anchor1;anchor2;anchor3;anchor4];
 nodes = [anchors;mobile1];
@@ -30,9 +30,15 @@ for i = 1:4
     xval = xval+anchors(i,1);
     yval = yval+anchors(i,2);
     plot(xval,yval,'--')
-    txt = strcat('  Anchor',num2str(i),': ');
+    txt = strcat('  Anchor',num2str(i),': [',num2str(anchors(i,1)),',',num2str(anchors(i,2)),']');
     text(anchors(i,1),anchors(i,2),txt)
     rssi(i) = rssi_value(radius);
 end
 
-distances = distance(rssi);
+distances = distance(rssi)';
+est = NLS(anchors, distances);
+plot(est(1),est(2),'r*');
+txt = strcat('  Estimation: [',num2str(est(1)),',',num2str(est(2)),']  ');
+text(est(1),est(2),txt,'HorizontalAlignment','right');
+txt = texlabel(strcat('Error: ',num2str(norm(est-mobile1)*100),'%'));
+text(4.5,12.5,txt)
