@@ -8,7 +8,7 @@ anchor3 = [12,0];
 anchor4 = [12,12];
 
 %Mobile coordinate
-mobile1 = [6,6];
+mobile1 = [9,9];
 
 anchors = [anchor1;anchor2;anchor3;anchor4];
 nodes = [anchors;mobile1];
