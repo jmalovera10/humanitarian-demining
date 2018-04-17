@@ -23,25 +23,36 @@ if __name__ == "__main__":
     state = 0
     protocol = protocol()
     anchors = {}
+    xbee = XBee(ser)
 
     # Continuously read and print packets
     while True:
         try:
             if state == 0:
-                msg = bytes(protocol.FIND + protocol.END_COMMAND, 'utf-8')
+                # msg = bytes(protocol.FIND + protocol.END_COMMAND, 'utf-8')
                 # print(msg)
-                ser.write(msg)
+                # ser.write(msg)
+                msg = protocol.FIND
+                xbee.send("tx", frame='A', dest_addr='\xFF\xFF', data=msg)
                 timeout = int(round(time.time() * 1000))
-                while int(round(time.time() * 1000)) - timeout < 500:
-                    if ser.in_waiting:
-                        data = ser.readline()
-                        if data:
-                            data = data.replace(b'\n', b'')
-                            data = str(data, 'utf8')
-                            if data.startswith(protocol.SYNCHRONIZE):
+                while int(round(time.time() * 1000)) - timeout < 1500:
+                    # if ser.in_waiting:
+                    # data = ser.readline()
+                    data = None
+                    try:
+                        data = xbee.wait_read_frame(0.3)
+                    except:
+                        # print("Wait timeout")
+                        data = None
+                    if data:
+                        print(data)
+                        msg = data['rf_data']
+                        if msg.startswith(protocol.SYNCHRONIZE):
+                            addr = data['source_addr']
+                            if addr not in anchors:
                                 print("ADDING")
-                                params = data.split(protocol.SEPARATOR)
-                                anchors[params[1]] = 0
+                                anchors[addr] = 0
+                print("SYNC timeout")
                 if len(anchors) > 0:
                     state += 1
             elif state == 1:

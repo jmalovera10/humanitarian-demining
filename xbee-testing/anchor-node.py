@@ -1,3 +1,4 @@
+from xbee import XBee
 import serial
 import time
 
@@ -19,25 +20,26 @@ if __name__ == "__main__":
 
     # Open serial port
     ser = serial.Serial(PORT, BAUD_RATE)
+    xbee = XBee(ser)
 
     # Continuously read and print packets
 
     while True:
         try:
-            data = ser.readline()
+            # data = ser.readline()
+            data = xbee.wait_read_frame()
+            print("arrived")
             if data:
-                data = str(data, 'utf8')
+                # data = str(data, 'utf8')
                 print(data)
-                if data.startswith(protocol.FIND):
-                    #print("READY TO SYNC")
-                    ser.write(b'+++')
-                    time.sleep(2)
-                    ser.write(b'ATDB')
-                    rssi = ser.read()
-                    ser.write(b'ATCN')
+                msg = data['rf_data']
+                if msg.startswith(protocol.FIND):
+                    # print("READY TO SYNC")
+                    rssi = hex(ord(data['rssi']))
                     print(rssi)
-                    time.sleep(1)
-                    ser.write(bytes(protocol.SYNCHRONIZE + protocol.SEPARATOR + "0" + protocol.END_COMMAND, 'utf-8'))
+                    # ser.write(bytes(protocol.SYNCHRONIZE + protocol.SEPARATOR + "0" + protocol.END_COMMAND, 'utf-8'))
+                    xbee.send("tx", frame='B', dest_addr='\x00\x00',
+                              data=protocol.SYNCHRONIZE)
         except KeyboardInterrupt:
             break
         except serial.SerialTimeoutException:
