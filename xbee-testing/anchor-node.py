@@ -1,4 +1,5 @@
 from xbee import XBee
+import sys
 import serial
 
 
@@ -11,7 +12,7 @@ class protocol():
 
 
 if __name__ == "__main__":
-    PORT = 'COM10'
+    PORT = int(sys.argv[1])
     BAUD_RATE = 9600
 
     # Open serial port

@@ -1,4 +1,5 @@
 from xbee import XBee
+import sys
 import serial
 import time
 
@@ -12,9 +13,9 @@ class protocol():
 
 
 if __name__ == "__main__":
-    PORT = 'COM13'
+    PORT = int(sys.argv[1])
     BAUD_RATE = 9600
-    REQUESTS = 5
+    REQUESTS = int(sys.argv[2])
 
     # Open serial port
     ser = serial.Serial(PORT, BAUD_RATE)
