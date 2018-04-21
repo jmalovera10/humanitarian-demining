@@ -12,7 +12,7 @@ class protocol():
 
 
 if __name__ == "__main__":
-    PORT = int(sys.argv[1])
+    PORT = sys.argv[1]
     BAUD_RATE = 9600
 
     # Open serial port
