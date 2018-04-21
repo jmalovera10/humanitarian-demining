@@ -1,14 +1,14 @@
 %Anchor 1 coordinates 
-anchor1 = [0,0];
+anchor1 = [0,2];
 %Anchor 2 coordinates 
-anchor2 = [0,12];
+anchor2 = [4,0];
 %Anchor 3 coordinates 
-anchor3 = [12,0];
+anchor3 = [8,0];
 %Anchor 4 coordinates 
-anchor4 = [12,12];
+anchor4 = [12,2];
 
 %Mobile coordinate
-mobile1 = [5,5];
+mobile1 = [6,6];
 
 anchors = [anchor1;anchor2;anchor3;anchor4];
 nodes = [anchors;mobile1];

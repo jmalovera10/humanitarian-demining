@@ -1,21 +1,17 @@
 from xbee import XBee
 import serial
-import time
 
 
 class protocol():
     FIND = "FETCH"
     SYNCHRONIZE = "SYNC"
     QUERY = "QRY"
-    RSSI = "RSSI"
-    VALUES = "VALS"
     VALUE = "VAL"
     SEPARATOR = ";"
-    END_COMMAND = "\n"
 
 
 if __name__ == "__main__":
-    PORT = 'COM14'
+    PORT = 'COM10'
     BAUD_RATE = 9600
 
     # Open serial port
@@ -40,6 +36,11 @@ if __name__ == "__main__":
                     # ser.write(bytes(protocol.SYNCHRONIZE + protocol.SEPARATOR + "0" + protocol.END_COMMAND, 'utf-8'))
                     xbee.send("tx", frame='B', dest_addr='\x00\x00',
                               data=protocol.SYNCHRONIZE)
+                elif msg.startswith(protocol.QUERY):
+                    requests = int(msg.split(protocol.SEPARATOR)[1])
+                    for i in range(requests):
+                        xbee.send("tx", frame='C', dest_addr='\x00\x00',
+                                  data=protocol.VALUE)
         except KeyboardInterrupt:
             break
         except serial.SerialTimeoutException:
