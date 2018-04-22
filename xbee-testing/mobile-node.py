@@ -41,7 +41,7 @@ if __name__ == "__main__":
                     data = None
                     try:
                         data = xbee.wait_read_frame(0.3)
-                    except:
+                    except serial.SerialTimeoutException:
                         # print("Wait timeout")
                         data = None
                     if data:
@@ -66,7 +66,7 @@ if __name__ == "__main__":
                         for i in range(REQUESTS):
                             try:
                                 data = xbee.wait_read_frame(0.3)
-                            except:
+                            except serial.SerialTimeoutException:
                                 print("REQUEST TIMEOUT")
                                 continue
                             print(data)
