@@ -1,4 +1,5 @@
 from xbee import XBee
+from xbee.backend.base import TimeoutException
 import sys
 import serial
 import time
@@ -41,7 +42,7 @@ if __name__ == "__main__":
                     data = None
                     try:
                         data = xbee.wait_read_frame(0.3)
-                    except serial.SerialTimeoutException:
+                    except TimeoutException:
                         # print("Wait timeout")
                         data = None
                     if data:
@@ -66,7 +67,7 @@ if __name__ == "__main__":
                         for i in range(REQUESTS):
                             try:
                                 data = xbee.wait_read_frame(0.3)
-                            except serial.SerialTimeoutException:
+                            except TimeoutException:
                                 print("REQUEST TIMEOUT")
                                 continue
                             print(data)
