@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <Xbee.h>
 
+#define MAX_FRAME_DATA_SIZE 110
+
 const String FIND="FETCH";
 const String SYNCHRONIZE="SYNC";
 const String QUERY="QRY";
@@ -8,7 +10,7 @@ const String VALUE="VAL";
 const String SEPARATOR=";";
 
 XBee xbee = XBee();
-
+XBeeResponse response = XBeeResponse();
 // allocate two bytes for to hold a 10-bit analog reading
 //uint8_t payload[];
 
@@ -43,12 +45,14 @@ void processCommand(uint8_t data[], uint8_t dataLength){
 
 void setup() {
   Serial.begin(9600);
-  xbee.setSerial(Serial);
+  Serial1.begin(9600);
+  xbee.setSerial(Serial1);
 }
 
 void loop() {
-    xbee.readPacket();
-    if (xbee.getResponse().isAvailable()) {
+
+    if (xbee.readPacket(100)) {
+      Serial.println("HAY DATOS");
         // got something
       if (xbee.getResponse().getApiId() == RX_16_RESPONSE || xbee.getResponse().getApiId() == RX_64_RESPONSE) {
           // got a rx packet
@@ -61,6 +65,9 @@ void loop() {
         }
       }
     } else if (xbee.getResponse().isError()) {
-        xbee.getResponse().getErrorCode();
+        Serial.println(xbee.getResponse().getErrorCode());
+    }else{
+      //Serial.println("No entiendo");
     }
+    delay(100);
 }

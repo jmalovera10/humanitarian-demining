@@ -11,6 +11,8 @@ class protocol():
     QUERY = "QRY"
     VALUE = "VAL"
     SEPARATOR = ";"
+    RSSI = "RSSI"
+    SYNC_PROC = "SYNC_PROC"
 
 
 if __name__ == "__main__":
@@ -23,6 +25,7 @@ if __name__ == "__main__":
     state = 0
     protocol = protocol()
     anchors = {}
+    processors = {}
     xbee = XBee(ser)
     timeout = 0
 
@@ -36,7 +39,7 @@ if __name__ == "__main__":
                 msg = protocol.FIND
                 xbee.send("tx", frame='A', dest_addr='\xFF\xFF', data=msg)
                 timeout = int(round(time.time() * 1000))
-                while int(round(time.time() * 1000)) - timeout < 500:
+                while int(round(time.time() * 1000)) - timeout < 1000:
                     # if ser.in_waiting:
                     # data = ser.readline()
                     data = None
@@ -53,6 +56,11 @@ if __name__ == "__main__":
                             if addr not in anchors:
                                 print("ANCHOR ADDED")
                                 anchors[addr] = 0
+                        elif msg.startswith(protocol.SYNC_PROC):
+                            addr = data['source_addr']
+                            if addr not in anchors:
+                                print("PROCESSOR ADDED")
+                                processors[addr] = 0
                 print("SYNC TIMEOUT")
                 if len(anchors) > 0:
                     state += 1
@@ -79,9 +87,12 @@ if __name__ == "__main__":
                         if anchors[anch] > 0:
                             anchors[anch] /= received
                         print(anchors[anch])
+                    for proc in processors:
+                        xbee.send("tx", frame='A', dest_addr=proc, data=str(anchors))
                 else:
                     state = 0
                     anchors = {}
+                    processors = {}
         except KeyboardInterrupt:
             break
         except serial.SerialTimeoutException:
