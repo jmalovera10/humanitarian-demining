@@ -19,8 +19,8 @@ if __name__ == "__main__":
 
     ser = serial.Serial(PORT, BAUD_RATE)
     xbee = XBee(ser)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((HOST, PROC_PORT))
+    #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #sock.connect((HOST, PROC_PORT))
 
     while True:
         try:
@@ -55,4 +55,4 @@ if __name__ == "__main__":
         # print("An unexpected error occurred")
         # break
     ser.close()
-    sock.close()
+    #sock.close()

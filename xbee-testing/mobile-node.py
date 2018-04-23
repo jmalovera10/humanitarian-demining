@@ -51,16 +51,17 @@ if __name__ == "__main__":
                     if data:
                         print(data)
                         msg = data['rf_data']
-                        if msg.startswith(protocol.SYNCHRONIZE):
-                            addr = data['source_addr']
-                            if addr not in anchors:
-                                print("ANCHOR ADDED")
-                                anchors[addr] = 0
-                        elif msg.startswith(protocol.SYNC_PROC):
+                        if msg.startswith(protocol.SYNC_PROC):
                             addr = data['source_addr']
                             if addr not in anchors:
                                 print("PROCESSOR ADDED")
                                 processors[addr] = 0
+                        elif msg.startswith(protocol.SYNCHRONIZE):
+                            addr = data['source_addr']
+                            if addr not in anchors:
+                                print("ANCHOR ADDED")
+                                anchors[addr] = 0
+
                 print("SYNC TIMEOUT")
                 if len(anchors) > 0:
                     state += 1
