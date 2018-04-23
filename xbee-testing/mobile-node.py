@@ -89,7 +89,7 @@ if __name__ == "__main__":
                             anchors[anch] /= received
                         print(anchors[anch])
                     for proc in processors:
-                        xbee.send("tx", frame='A', dest_addr=proc, data=str(anchors))
+                        xbee.send("tx", frame='A', dest_addr=proc, data=(protocol.RSSI+protocol.SEPARATOR+str(anchors)))
                 else:
                     state = 0
                     anchors = {}

@@ -9,6 +9,7 @@ class protocol():
     FIND = "FETCH"
     RSSI = "RSSI"
     SYNC_PROC = "SYNC_PROC"
+    SEPARATOR = ";"
 
 
 if __name__ == "__main__":
@@ -19,8 +20,8 @@ if __name__ == "__main__":
 
     ser = serial.Serial(PORT, BAUD_RATE)
     xbee = XBee(ser)
-    #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #sock.connect((HOST, PROC_PORT))
+    # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # sock.connect((HOST, PROC_PORT))
 
     while True:
         try:
@@ -39,6 +40,7 @@ if __name__ == "__main__":
                     xbee.send("tx", frame='B', dest_addr='\x00\x00',
                               data=protocol.SYNC_PROC)
                 elif msg.startswith(protocol.RSSI):
+                    msg = msg.replace(protocol.RSSI + protocol.SEPARATOR, "")
                     rssi_values = ast.literal_eval(msg)
                     print(rssi_values)
                     for anchors in rssi_values:
@@ -55,4 +57,4 @@ if __name__ == "__main__":
         # print("An unexpected error occurred")
         # break
     ser.close()
-    #sock.close()
+    # sock.close()
