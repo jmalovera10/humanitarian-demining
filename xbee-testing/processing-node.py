@@ -20,8 +20,12 @@ if __name__ == "__main__":
 
     ser = serial.Serial(PORT, BAUD_RATE)
     xbee = XBee(ser)
-    # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # sock.connect((HOST, PROC_PORT))
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind((HOST, PROC_PORT))
+    sock.listen(1)
+
+    conn, PROC_IP = sock.accept()
+    print("PROCESSOR CONNECTED")
 
     while True:
         try:
@@ -45,9 +49,15 @@ if __name__ == "__main__":
                     print(rssi_values)
                     for anchors in rssi_values:
                         rssi = rssi_values[anchors]
-                        id = int(anchors)
-                        print(rssi)
-                        print(id)
+                        cod = map(ord, anchors)
+                        id = cod[0] * 256 + cod[1]
+                        try:
+                            conn.send(str(id)+protocol.SEPARATOR+str(rssi))
+                            print("DATA SENT")
+                        except socket.error:
+                            print("PROC CONNECTION ERROR")
+                            conn, PROC_IP = sock.accept()
+                            break
         except KeyboardInterrupt:
             break
         except serial.SerialTimeoutException:
@@ -57,4 +67,5 @@ if __name__ == "__main__":
         # print("An unexpected error occurred")
         # break
     ser.close()
-    # sock.close()
+    conn.close()
+    sock.close()
