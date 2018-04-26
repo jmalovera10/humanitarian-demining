@@ -3,6 +3,7 @@ import sys
 import serial
 import socket
 import ast
+import time
 
 
 class protocol():
@@ -53,6 +54,7 @@ if __name__ == "__main__":
                         id = cod[0] * 256 + cod[1]
                         try:
                             conn.send(str(id)+protocol.SEPARATOR+str(rssi))
+                            time.sleep(0.1)
                             print("DATA SENT")
                         except socket.error:
                             print("PROC CONNECTION ERROR")
