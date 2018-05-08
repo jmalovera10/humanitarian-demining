@@ -2,11 +2,11 @@ function [ done ] = position_calculation( rssi )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 %Anchor 1 coordinates 
-anchor1 = [0,2];
+anchor1 = [0,0];
 %Anchor 2 coordinates 
-anchor2 = [4,0];
+anchor2 = [0,1];
 %Anchor 3 coordinates 
-anchor3 = [8,0];
+anchor3 = [0,2];
 
 anchors = [anchor1;anchor2;anchor3];
 clf('reset')

@@ -29,7 +29,7 @@ if __name__ == "__main__":
             if data:
                 # data = str(data, 'utf8')
                 print(data)
-                msg = data['rf_data']
+                msg = data['rf_data'].decode('ascii')
                 if msg.startswith(protocol.FIND):
                     # print("READY TO SYNC")
                     rssi = hex(ord(data['rssi']))

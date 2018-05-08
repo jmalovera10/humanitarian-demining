@@ -3,6 +3,6 @@ function [ distances ] = distance( rssi )
 %   Detailed explanation goes here
 distances = [];
 for i = 1:length(rssi)
-    distances(i) = 10.^((-rssi(i)+36)/20);
+    distances(i) = 10.^((-rssi(i)+57)/20);
 end
 

@@ -1,6 +1,8 @@
 client = tcpclient('localhost', 9100);
 rssi_values = [-1,-1,-1];
 info = 0;
+res = [];
+resI = 1;
 while true
     data = read(client);
     if data
@@ -22,9 +24,12 @@ while true
                 mult = mult*10;
             end
         end
-        rssi_values(id) = rssi;
+        rssi_values(id) = rssi
         info = info+1;
         if info==3
+            r = position_calculation(rssi_values);
+            res(resI,:) = r;
+            resI = resI+1;
             info = 0;
             rssi_values = [-1,-1,-1];
         end
